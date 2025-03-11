@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>賽博兵法 - 孫子兵法的現代應用</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'cyber-blue': '#00f0ff',
+                        'cyber-pink': '#ff00ff',
+                        'cyber-yellow': '#ffff00',
+                        'cyber-dark': '#0a0a16',
+                        'cyber-darker': '#050508',
+                    },
+                    fontFamily: {
+                        'cyber': ['Orbitron', 'sans-serif'],
+                        'body': ['Rajdhani', 'sans-serif'],
+                    },
+                    animation: {
+                        'text-glitch': 'textGlitch 3s infinite',
+                        'border-glow': 'borderGlow 2s infinite alternate',
+                    },
+                    keyframes: {
+                        textGlitch: {
+                            '0%, 100%': { textShadow: '0 0 5px #00f0ff, 0 0 10px #00f0ff, 0 0 15px #00f0ff' },
+                            '25%': { textShadow: '0 0 5px #ff00ff, 0 0 10px #ff00ff, 0 0 15px #ff00ff' },
+                            '50%': { textShadow: '0 0 5px #ffff00, 0 0 10px #ffff00, 0 0 15px #ffff00' },
+                            '75%': { textShadow: '0 0 5px #00f0ff, 0 0 10px #00f0ff, 0 0 15px #00f0ff' },
+                        },
+                        borderGlow: {
+                            '0%': { boxShadow: '0 0 5px #00f0ff' },
+                            '50%': { boxShadow: '0 0 20px #ff00ff' },
+                            '100%': { boxShadow: '0 0 5px #ffff00' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style type="text/css">
+        /* 自定義樣式 */
+        .cyber-gradient {
+            background: linear-gradient(45deg, #00f0ff, #ff00ff, #ffff00);
+            background-size: 200% 200%;
+            animation: gradientShift 10s ease infinite;
+        }
+        
+        .cyber-border {
+            position: relative;
+        }
+        
+        .cyber-border::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #00f0ff, #ff00ff, #ffff00);
+            z-index: -1;
+            animation: borderGlow 3s linear infinite;
+            border-radius: inherit;
+        }
+        
+        /* 修正的文字故障效果 */
+        .text-glitch {
+            position: relative;
+            display: inline-block; /* 確保元素只佔用所需的空間 */
+        }
+        
+        .text-glitch::after,
+        .text-glitch::before {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+        }
+        
+        .text-glitch::before {
+            left: 2px;
+            text-shadow: -2px 0 #ff00ff;
+            animation: glitch-1 2s infinite linear alternate-reverse;
+        }
+        
+        .text-glitch::after {
+            left: -2px;
+            text-shadow: 2px 0 #00f0ff;
+            animation: glitch-2 3s infinite linear alternate-reverse;
+        }
+        
+        @keyframes glitch-1 {
+            0% { clip-path: inset(30% 0 40% 0); }
+            20% { clip-path: inset(80% 0 1% 0); }
+            40% { clip-path: inset(43% 0 27% 0); }
+            60% { clip-path: inset(25% 0 58% 0); }
+            80% { clip-path: inset(13% 0 75% 0); }
+            100% { clip-path: inset(63% 0 37% 0); }
+        }
+        
+        @keyframes glitch-2 {
+            0% { clip-path: inset(15% 0 49% 0); }
+            20% { clip-path: inset(40% 0 32% 0); }
+            40% { clip-path: inset(63% 0 2% 0); }
+            60% { clip-path: inset(43% 0 24% 0); }
+            80% { clip-path: inset(5% 0 58% 0); }
+            100% { clip-path: inset(82% 0 13% 0); }
+        }
+        
+        @keyframes textNoise {
+            0% { clip-path: inset(30% 0 40% 0); }
+            20% { clip-path: inset(80% 0 1% 0); }
+            40% { clip-path: inset(43% 0 27% 0); }
+            60% { clip-path: inset(25% 0 58% 0); }
+            80% { clip-path: inset(13% 0 75% 0); }
+            100% { clip-path: inset(63% 0 37% 0); }
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        @keyframes borderGlow {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .cyber-card {
+            transition: all 0.3s ease;
+            background: rgba(10, 10, 22, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+        }
+        
+        .cyber-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.5), 
+                        0 0 30px rgba(255, 0, 255, 0.2);
+            border: 1px solid rgba(0, 240, 255, 0.8);
+        }
+        
+        .cyber-button {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .cyber-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: all 0.5s ease;
+        }
+        
+        .cyber-button:hover::before {
+            left: 100%;
+        }
+        
+        .cyber-input:focus {
+            border-image: linear-gradient(45deg, #00f0ff, #ff00ff) 1;
+            animation: animate-border-glow 2s infinite alternate;
+        }
+        
+        @keyframes animate-border-glow {
+            0% { box-shadow: 0 0 5px #00f0ff; }
+            100% { box-shadow: 0 0 20px #ff00ff; }
+        }
+        
+        /* 背景圖片過渡效果 */
+        .bg-image {
+            transition: opacity 0.3s ease;
+        }
+        
+        /* 背景網格 */
+        .cyber-grid {
+            background-image: 
+                linear-gradient(rgba(0, 240, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 240, 255, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+    </style>
+</head>
+<body class="bg-cyber-darker font-body text-gray-200 cyber-grid min-h-screen">
+    <!-- 導航欄 -->
+    <nav class="bg-cyber-dark/80 backdrop-blur-md border-b border-cyber-blue/30 sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center">
+                <span class="text-cyber-blue font-cyber text-xl md:text-2xl font-bold animate-text-glitch">賽博兵法</span>
+            </div>
+            <div class="hidden md:flex space-x-6">
+                <a href="#principles" class="text-gray-300 hover:text-cyber-blue transition-colors duration-300">兵法原則</a>
+                <a href="#applications" class="text-gray-300 hover:text-cyber-blue transition-colors duration-300">現代應用</a>
+                <a href="#strategies" class="text-gray-300 hover:text-cyber-blue transition-colors duration-300">戰略思維</a>
+                <a href="#contact" class="text-gray-300 hover:text-cyber-blue transition-colors duration-300">聯繫我們</a>
+            </div>
+            <div class="md:hidden">
+                <button class="text-gray-300 hover:text-cyber-blue">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- 英雄區塊 -->
+    <header class="relative h-screen flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <img src="./images/cyberpunk-bg.jpg" alt="賽博龐克背景" class="w-full h-full object-cover opacity-40">
+            <div class="absolute inset-0 bg-gradient-to-b from-cyber-darker/70 via-cyber-darker/50 to-cyber-darker"></div>
+        </div>
+        
+        <div class="container mx-auto px-4 z-10 text-center">
+            <!-- 修正的標題部分 -->
+            <h1 class="text-4xl md:text-6xl lg:text-7xl font-cyber font-bold mb-4">
+                <span class="text-glitch inline-block" data-text="孫子兵法">
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyber-blue via-cyber-pink to-cyber-yellow">孫子兵法</span>
+                </span>
+            </h1>
+            <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
+                古老智慧，<span class="text-cyber-blue">數位時代</span>的戰略指南
+            </p>
+            <div class="flex flex-col md:flex-row justify-center gap-4 mt-8">
+                <a href="#principles" class="cyber-button bg-cyber-blue/20 hover:bg-cyber-blue/30 border border-cyber-blue text-cyber-blue px-6 py-3 rounded-md font-cyber font-semibold transition-all">
+                    <i class="fas fa-book-open mr-2"></i> 探索兵法
+                </a>
+                <a href="#applications" class="cyber-button bg-cyber-pink/20 hover:bg-cyber-pink/30 border border-cyber-pink text-cyber-pink px-6 py-3 rounded-md font-cyber font-semibold transition-all">
+                    <i class="fas fa-rocket mr-2"></i> 現代應用
+                </a>
+            </div>
+        </div>
+    </header>
+    
+    <!-- 兵法原則部分 -->
+    <section id="principles" class="py-20 bg-cyber-dark relative">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-cyber font-bold mb-12 text-center">
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyber-blue to-cyber-pink">兵法原則</span>
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- 原則卡片 1 -->
+                <div class="cyber-card p-6 rounded-lg">
+                    <div class="text-cyber-yellow text-4xl mb-4">
+                        <i class="fas fa-chess"></i>
+                    </div>
+                    <h3 class="text-xl font-cyber font-semibold mb-3 text-cyber-blue">知己知彼</h3>
+                    <p class="text-gray-300">知己知彼，百戰不殆。在數位時代，了解自身能力與對手策略同樣重要。</p>
+                </div>
+                
+                <!-- 原則卡片 2 -->
+                <div class="cyber-card p-6 rounded-lg">
+                    <div class="text-cyber-pink text-4xl mb-4">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3 class="text-xl font-cyber font-semibold mb-3 text-cyber-pink">速戰速決</h3>
+                    <p class="text-gray-300">兵貴神速，在資訊爆炸的時代，快速決策與執行是取勝關鍵。</p>
+                </div>
+                
+                <!-- 原則卡片 3 -->
+                <div class="cyber-card p-6 rounded-lg">
+                    <div class="text-cyber-blue text-4xl mb-4">
+                        <i class="fas fa-water"></i>
+                    </div>
+                    <h3 class="text-xl font-cyber font-semibold mb-3 text-cyber-blue">因勢利導</h3>
+                    <p class="text-gray-300">上善若水，善於利用環境變化，順勢而為是現代戰略的精髓。</p>
+                </div>
+                
+                <!-- 原則卡片 4 -->
+                <div class="cyber-card p-6 rounded-lg">
+                    <div class="text-cyber-yellow text-4xl mb-4">
+                        <i class="fas fa-mask"></i>
+                    </div>
+                    <h3 class="text-xl font-cyber font-semibold mb-3 text-cyber-yellow">虛實相生</h3>
+                    <p class="text-gray-300">虛則實之，實則虛之。在信息戰中，迷惑與真實的平衡至關重要。</p>
+                </div>
+                
+                <!-- 原則卡片 5 -->
+                <div class="cyber-card p-6 rounded-lg">
+                    <div class="text-cyber-pink text-4xl mb-4">
+                        <i class="fas fa-route"></i>
+                    </div>
+                    <h3 class="text-xl font-cyber font-semibold mb-3 text-cyber-pink">避實擊虛</h3>
+                    <p class="text-gray-300">攻其無備，出其不意。找到對手的弱點並集中力量突破。</p>
+                </div>
+                
+                <!-- 原則卡片 6 -->
+                <div class="cyber-card p-6 rounded-lg">
+                    <div class="text-cyber-blue text-4xl mb-4">
+                        <i class="fas fa-balance-scale"></i>
+                    </div>
+                    <h3 class="text-xl font-cyber font-semibold mb-3 text-cyber-blue">謀定後動</h3>
+                    <p class="text-gray-300">勝兵先勝而後求戰。在行動前充分規劃，確保戰略目標明確。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 現代應用部分 -->
+    <section id="applications" class="py-20 relative">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-cyber font-bold mb-12 text-center">
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyber-pink to-cyber-yellow">現代應用</span>
+            </h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div class="cyber-card p-6 rounded-lg flex flex-col md:flex-row gap-6">
+                    <div class="md:w-1/3">
+                        <img src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80" alt="商業戰略" class="w-full h-48 object-cover rounded-md">
+                    </div>
+                    <div class="md:w-2/3">
+                        <h3 class="text-xl font-cyber font-semibold mb-3 text-cyber-blue">商業戰略</h3>
+                        <p class="text-gray-300 mb-4">在競爭激烈的市場中，孫子兵法的原則可以指導企業制定有效的市場策略，識別競爭對手的弱點，並利用自身優勢。</p>
+                        <a href="#" class="cyber-button inline-block bg-cyber-blue/20 hover:bg-cyber-blue/30 border border-cyber-blue text-cyber-blue px-4 py-2 rounded-md font-cyber text-sm transition-all">
+                            了解更多 <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="cyber-card p-6 rounded-lg flex flex-col md:flex-row gap-6">
+                    <div class="md:w-1/3">
+                        <img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80" alt="網絡安全" class="w-full h-48 object-cover rounded-md">
+                    </div>
+                    <div class="md:w-2/3">
+                        <h3 class="text-xl font-cyber font-semibold mb-3 text-cyber-pink">網絡安全</h3>
+                        <p class="text-gray-300 mb-4">在數位時代，孫子兵法的防禦與攻擊策略可應用於網絡安全領域，幫助組織預防攻擊並保護重要資產。</p>
+                        <a href="#" class="cyber-button inline-block bg-cyber-pink/20 hover:bg-cyber-pink/30 border border-cyber-pink text-cyber-pink px-4 py-2 rounded-md font-cyber text-sm transition-all">
+                            了解更多 <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="cyber-card p-6 rounded-lg flex flex-col md:flex-row gap-6">
+                    <div class="md:w-1/3">
+                        <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80" alt="領導力" class="w-full h-48 object-cover rounded-md">
+                    </div>
+                    <div class="md:w-2/3">
+                        <h3 class="text-xl font-cyber font-semibold mb-3 text-cyber-yellow">領導力發展</h3>
+                        <p class="text-gray-300 mb-4">孫子兵法中關於領導者素質的論述，可以幫助現代管理者培養戰略思維，激勵團隊並有效應對挑戰。</p>
+                        <a href="#" class="cyber-button inline-block bg-cyber-yellow/20 hover:bg-cyber-yellow/30 border border-cyber-yellow text-cyber-yellow px-4 py-2 rounded-md font-cyber text-sm transition-all">
+                            了解更多 <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="cyber-card p-6 rounded-lg flex flex-col md:flex-row gap-6">
+                    <div class="md:w-1/3">
+                        <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80" alt="談判策略" class="w-full h-48 object-cover rounded-md">
+                    </div>
+                    <div class="md:w-2/3">
+                        <h3 class="text-xl font-cyber font-semibold mb-3 text-cyber-blue">談判策略</h3>
+                        <p class="text-gray-300 mb-4">孫子兵法中的心理戰術和策略思維可以應用於商業談判，幫助談判者在複雜局勢中取得優勢。</p>
+                        <a href="#" class="cyber-button inline-block bg-cyber-blue/20 hover:bg-cyber-blue/30 border border-cyber-blue text-cyber-blue px-4 py-2 rounded-md font-cyber text-sm transition-all">
+                            了解更多 <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 戰略思維部分 -->
+    <section id="strategies" class="py-20 bg-cyber-dark relative">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-cyber font-bold mb-12 text-center">
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyber-yellow to-cyber-blue">戰略思維</span>
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="cyber-card p-8 rounded-lg">
+                    <h3 class="text-xl font-cyber font-semibold mb-4 text-cyber-blue">戰略分析框架</h3>
+                    <p class="text-gray-300 mb-6">孫子兵法提供了一套完整的戰略分析框架，可以幫助現代決策者評估形勢、識別風險並制定有效策略。</p>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-full bg-cyber-blue/20 flex items-center justify-center mr-3">
+                                <i class="fas fa-search text-cyber-blue"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-cyber text-cyber-blue">情報收集</h4>
+                                <p class="text-sm text-gray-400">全面收集相關信息，建立情報網絡</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-full bg-cyber-pink/20 flex items-center justify-center mr-3">
+                                <i class="fas fa-chart-line text-cyber-pink"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-cyber text-cyber-pink">形勢分析</h4>
+                                <p class="text-sm text-gray-400">評估優勢劣勢，識別機會與威脅</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-full bg-cyber-yellow/20 flex items-center justify-center mr-3">
+                                <i class="fas fa-chess-knight text-cyber-yellow"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-cyber text-cyber-yellow">策略制定</h4>
+                                <p class="text-sm text-gray-400">根據分析結果，制定最佳行動方案</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-full bg-cyber-blue/20 flex items-center justify-center mr-3">
+                                <i class="fas fa-cogs text-cyber-blue"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-cyber text-cyber-blue">執行與調整</h4>
+                                <p class="text-sm text-gray-400">靈活實施策略，根據反饋及時調整</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="cyber-card p-8 rounded-lg">
+                    <h3 class="text-xl font-cyber font-semibold mb-4 text-cyber-pink">決策模型</h3>
+                    <p class="text-gray-300 mb-6">基於孫子兵法的決策模型可以幫助現代領導者在不確定性中做出明智決策。</p>
+                    
+                    <div class="relative h-64">
+                        <div class="absolute inset-0 cyber-border rounded-lg overflow-hidden">
+                            <div class="h-full w-full p-4 bg-cyber-darker">
+                                <div class="h-full flex flex-col justify-between">
+                                    <div class="text-center">
+                                        <span class="text-cyber-blue font-cyber">決策流程</span>
+                                    </div>
+                                    
+                                    <div class="flex justify-between items-center">
+                                        <div class="text-center">
+                                            <div class="w-12 h-12 mx-auto rounded-full bg-cyber-blue/20 flex items-center justify-center mb-2">
+                                                <i class="fas fa-question text-cyber-blue"></i>
+                                            </div>
+                                            <span class="text-xs text-gray-300">問題定義</span>
+                                        </div>
+                                        
+                                        <i class="fas fa-arrow-right text-cyber-pink"></i>
+                                        
+                                        <div class="text-center">
+                                            <div class="w-12 h-12 mx-auto rounded-full bg-cyber-pink/20 flex items-center justify-center mb-2">
+                                                <i class="fas fa-lightbulb text-cyber-pink"></i>
+                                            </div>
+                                            <span class="text-xs text-gray-300">方案生成</span>
+                                        </div>
+                                        
+                                        <i class="fas fa-arrow-right text-cyber-yellow"></i>
+                                        
+                                        <div class="text-center">
+                                            <div class="w-12 h-12 mx-auto rounded-full bg-cyber-yellow/20 flex items-center justify-center mb-2">
+                                                <i class="fas fa-balance-scale text-cyber-yellow"></i>
+                                            </div>
+                                            <span class="text-xs text-gray-300">評估選擇</span>
+                                        </div>
+                                        
+                                        <i class="fas fa-arrow-right text-cyber-blue"></i>
+                                        
+                                        <div class="text-center">
+                                            <div class="w-12 h-12 mx-auto rounded-full bg-cyber-blue/20 flex items-center justify-center mb-2">
+                                                <i class="fas fa-check text-cyber-blue"></i>
+                                            </div>
+                                            <span class="text-xs text-gray-300">執行決策</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="text-center">
+                                        <span class="text-xs text-gray-400">「知彼知己，百戰不殆」</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="cyber-card p-8 rounded-lg">
+                <h3 class="text-xl font-cyber font-semibold mb-6 text-center text-cyber-yellow">經典語錄與現代解讀</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <blockquote class="border-l-4 border-cyber-blue pl-4 mb-4">
+                            <p class="italic text-gray-300">"上兵伐謀，其次伐交，其次伐兵，其下攻城。"</p>
+                        </blockquote>
+                        <p class="text-gray-400">現代解讀：最高明的戰略是不戰而勝，通過智慧和外交手段達成目標，而非直接衝突。在商業中，這意味著通過策略規劃和合作夥伴關係取勝，而非價格戰等直接對抗。</p>
+                    </div>
+                    
+                    <div>
+                        <blockquote class="border-l-4 border-cyber-pink pl-4 mb-4">
+                            <p class="italic text-gray-300">"故用兵之法，十則圍之，五則攻之，倍則分之，敵則能戰之，少則能逃之，不若則能避之。"</p>
+                        </blockquote>
+                        <p class="text-gray-400">現代解讀：根據形勢靈活調整策略，量力而行。在現代競爭中，這提醒我們要根據自身資源與對手實力的對比，選擇適當的競爭或合作策略。</p>
+                    </div>
+                    
+                    <div>
+                        <blockquote class="border-l-4 border-cyber-yellow pl-4 mb-4">
+                            <p class="italic text-gray-300">"故善戰者，求之於勢，不責於人，故能擇人而任勢。"</p>
+                        </blockquote>
+                        <p class="text-gray-400">現代解讀：優秀的領導者創造有利環境，而非苛責團隊成員。在管理中，這意味著建立良好的系統和流程，使團隊能夠充分發揮潛力。</p>
+                    </div>
+                    
+                    <div>
+                        <blockquote class="border-l-4 border-cyber-blue pl-4 mb-4">
+                            <p class="italic text-gray-300">"兵無常勢，水無常形，能因敵變化而取勝者，謂之神。"</p>
+                        </blockquote>
+                        <p class="text-gray-400">現代解讀：適應性和靈活性是成功的關鍵。在快速變化的數位時代，企業和個人需要像水一樣靈活，根據環境變化調整策略。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 聯繫我們部分 -->
+    <section id="contact" class="py-20 relative">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-cyber font-bold mb-12 text-center">
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyber-blue via-cyber-pink to-cyber-yellow">聯繫我們</span>
+            </h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div class="cyber-card p-8 rounded-lg">
+                    <h3 class="text-xl font-cyber font-semibold mb-6 text-cyber-blue">訂閱戰略通訊</h3>
+                    <p class="text-gray-300 mb-6">獲取最新的孫子兵法應用案例、戰略分析和專家見解，直接發送到您的郵箱。</p>
+                    
+                    <form class="space-y-4">
+                        <div>
+                            <label for="name" class="block text-gray-300 mb-2 font-cyber text-sm">姓名</label>
+                            <input type="text" id="name" class="cyber-input w-full bg-cyber-darker border border-cyber-blue/30 focus:border-cyber-blue text-gray-300 p-3 rounded-md focus:outline-none transition-all duration-300" placeholder="您的姓名">
+                        </div>
+                        
+                        <div>
+                            <label for="email" class="block text-gray-300 mb-2 font-cyber text-sm">電子郵件</label>
+                            <input type="email" id="email" class="cyber-input w-full bg-cyber-darker border border-cyber-blue/30 focus:border-cyber-blue text-gray-300 p-3 rounded-md focus:outline-none transition-all duration-300" placeholder="您的電子郵件">
+                        </div>
+                        
+                        <div>
+                            <label for="interest" class="block text-gray-300 mb-2 font-cyber text-sm">感興趣的領域</label>
+                            <select id="interest" class="cyber-input w-full bg-cyber-darker border border-cyber-blue/30 focus:border-cyber-blue text-gray-300 p-3 rounded-md focus:outline-none transition-all duration-300">
+                                <option value="">請選擇...</option>
+                                <option value="business">商業戰略</option>
+                                <option value="leadership">領導力發展</option>
+                                <option value="cybersecurity">網絡安全</option>
+                                <option value="negotiation">談判策略</option>
+                                <option value="all">所有領域</option>
+                            </select>
+                        </div>
+                        
+                        <button type="submit" class="cyber-button w-full bg-gradient-to-r from-cyber-blue to-cyber-pink text-white font-cyber font-semibold py-3 px-6 rounded-md hover:opacity-90 transition-all duration-300">
+                            訂閱通訊 <i class="fas fa-paper-plane ml-2"></i>
+                        </button>
+                    </form>
+                </div>
+                
+                <div class="cyber-card p-8 rounded-lg">
+                    <h3 class="text-xl font-cyber font-semibold mb-6 text-cyber-pink">聯繫方式</h3>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start">
+                            <div class="w-10 h-10 rounded-full bg-cyber-blue/20 flex items-center justify-center mr-4 mt-1">
+                                <i class="fas fa-map-marker-alt text-cyber-blue"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-cyber text-cyber-blue mb-1">總部位置</h4>
+                                <p class="text-gray-300">新北市信義區賽博大道88號</p>
+                                <p class="text-gray-300">數位塔21樓</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="w-10 h-10 rounded-full bg-cyber-pink/20 flex items-center justify-center mr-4 mt-1">
+                                <i class="fas fa-envelope text-cyber-pink"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-cyber text-cyber-pink mb-1">電子郵件</h4>
+                                <p class="text-gray-300">info@cyberartofwar.com</p>
+                                <p class="text-gray-300">support@cyberartofwar.com</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="w-10 h-10 rounded-full bg-cyber-yellow/20 flex items-center justify-center mr-4 mt-1">
+                                <i class="fas fa-phone-alt text-cyber-yellow"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-cyber text-cyber-yellow mb-1">聯繫電話</h4>
+                                <p class="text-gray-300">+886 2 1234 5678</p>
+                                <p class="text-gray-300">+886 2 8765 4321</p>
+                            </div>
+                        </div>
+                        
+                        <div class="pt-4">
+                            <h4 class="font-cyber text-cyber-blue mb-3">關注我們</h4>
+                            <div class="flex space-x-4">
+                                <a href="#" class="w-10 h-10 rounded-full bg-cyber-blue/20 flex items-center justify-center hover:bg-cyber-blue/40 transition-all">
+                                    <i class="fab fa-twitter text-cyber-blue"></i>
+                                </a>
+                                <a href="#" class="w-10 h-10 rounded-full bg-cyber-pink/20 flex items-center justify-center hover:bg-cyber-pink/40 transition-all">
+                                    <i class="fab fa-linkedin-in text-cyber-pink"></i>
+                                </a>
+                                <a href="#" class="w-10 h-10 rounded-full bg-cyber-yellow/20 flex items-center justify-center hover:bg-cyber-yellow/40 transition-all">
+                                    <i class="fab fa-instagram text-cyber-yellow"></i>
+                                </a>
+                                <a href="#" class="w-10 h-10 rounded-full bg-cyber-blue/20 flex items-center justify-center hover:bg-cyber-blue/40 transition-all">
+                                    <i class="fab fa-facebook-f text-cyber-blue"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 頁腳 -->
+    <footer class="bg-cyber-darker border-t border-cyber-blue/30 py-10">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <h4 class="font-cyber text-cyber-blue text-lg mb-4">賽博兵法</h4>
+                    <p class="text-gray-400 text-sm">將古老智慧轉化為現代戰略，幫助您在數位時代取得成功。</p>
+                </div>
+                
+                <div>
+                    <h4 class="font-cyber text-cyber-pink text-lg mb-4">快速連結</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#principles" class="text-gray-400 hover:text-cyber-pink transition-colors">兵法原則</a></li>
+                        <li><a href="#applications" class="text-gray-400 hover:text-cyber-pink transition-colors">現代應用</a></li>
+                        <li><a href="#strategies" class="text-gray-400 hover:text-cyber-pink transition-colors">戰略思維</a></li>
+                        <li><a href="#contact" class="text-gray-400 hover:text-cyber-pink transition-colors">聯繫我們</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-cyber text-cyber-yellow text-lg mb-4">資源中心</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="text-gray-400 hover:text-cyber-yellow transition-colors">電子書下載</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-cyber-yellow transition-colors">案例研究</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-cyber-yellow transition-colors">戰略工具包</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-cyber-yellow transition-colors">線上課程</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-cyber text-cyber-blue text-lg mb-4">法律信息</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="text-gray-400 hover:text-cyber-blue transition-colors">隱私政策</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-cyber-blue transition-colors">使用條款</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-cyber-blue transition-colors">Cookie 政策</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-cyber-blue transition-colors">版權聲明</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-cyber-blue/20 pt-6 text-center">
+                <p class="text-gray-500 text-sm">&copy; 2023 賽博兵法 | 孫子兵法的現代應用 | 版權所有</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- 簡單的JavaScript -->
+    <script>
+        // 平滑滾動
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // 簡單的文字動畫效果
+        const glitchTexts = document.querySelectorAll('.text-glitch');
+        glitchTexts.forEach(text => {
+            const content = text.textContent.trim();
+            text.setAttribute('data-text', content);
+        });
+    </script>
+</body>
+</html>
